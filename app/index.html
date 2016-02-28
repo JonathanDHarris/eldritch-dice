@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" ng-app="diceApp">
+<head>
+  <meta charset="utf-8">
+  <title>Eldritch Dice</title>
+  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="angular/angular.min.js"></script>
+  <script src="angular-animate/angular-animate.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/dice.js"></script>
+</head>
+<body>
+	
+	<div ng-controller="diceMainCtrl">
+		<div class="col-md-offset-1" >
+			</br>
+			</br>
+			<h1>Eldritch Die Calculator</h1>
+			
+			<form id="input_form" name="input_form" ng-submit="newTable()" class="css-form" novalidate>
+				<div class="input-group">
+					<span class="input-group-addon">Dice</span>
+					<input ng-model="submit_dice" name="submit_dice" >
+				</div>
+				</br>
+				<div class="input-group">
+					<span class="input-group-addon">Re-rolls</span>
+					<input ng-model="submit_rerolls" name="submit_rerolls" >
+				</div>
+				</br>
+				<div class="input-group" ng-mouseover="hoverNudge=true" ng-mouseleave="hoverNudge=false">
+					<span class="input-group-addon">Nudges</span>
+					<input ng-model="submit_nudges" name="submit_nudges" >
+				</div>
+				<span ng-show="hoverNudge"> Push a die result up by one if it will improve the score. E.g. lucky cigarette case, George's focus special ability.</span>
+				</br ng-show="!hoverNudge">
+				</br ng-show="!hoverNudge">
+				</br>
+				
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="abc-option-b" ng-model="option_abc" value ="b"> Blessed
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="abc-option-c" ng-model="option_abc" value="c"> Cursed
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="inlineRadioOptions" id="abc-option-a" ng-model="option_abc" value="a"> Normal
+				</label>
+				
+				</br>
+				</br>
+				
+				<div ng-mouseover="hoverFuncbB=true" ng-mouseleave="hoverFuncbB=false">
+					<label>Re-roll 1s:
+						<input type="checkbox" ng-model="add_funcB">
+					</label> 
+					<span ng-show="hoverFuncbB"> E.g. Skids O'Tool's special ability.</span>
+				</div>
+				<div ng-mouseover="hoverFuncbC=true" ng-mouseleave="hoverFuncbC=false">
+					<label>Re-roll doubles:
+						<input type="checkbox" ng-model="add_funcC">
+					</label>
+					<span ng-show="hoverFuncbC"> E.g. gambler's dice.</span>
+				</div>
+				<div ng-mouseover="hoverDoubleSix=true" ng-mouseleave="hoverDoubleSix=false">
+					<label>Sixes count as two successes
+						<input type="checkbox" ng-model="double_six">
+					</label>
+					<span ng-show="hoverDoubleSix"> E.g. Shotgun, blunderbus.</span>
+				</div>
+				<div ng-mouseover="hoverNegativeOne=true" ng-mouseleave="hoverNegativeOne=false">
+					<label>Ones subtract a successes.
+						<input type="checkbox" ng-model="negative_one">
+					</label>
+					<span ng-show="hoverNegativeOne"> E.g. blunderbus</span>
+				</div>
+			   
+			   </br>
+			   </br>
+				
+				<button type = "submit" class = "btn btn-default">Go</button>
+				<span ng-show="!validated">Dice and re-rolls must be numbers</span>
+			</form>
+				
+			</br>
+			
+			<div style="float: left; position:relative">
+				<div ng-show="loading" class="container fader" style="position: absolute; top: 0; left: 0; ">
+					<p><i>{{characterText}}</i></p>
+						
+				</div>
+				<div ng-show="!loading" class="fader">
+					<table class="table table-condensed" ng-if="resultsTable.rows.length > 0">
+						<tr>
+							<th style="text-align:right">Number of Successes</th>
+							
+							<th ng-repeat="successes in successRow">
+								{{successes}}
+							<th> 
+							
+						</tr>
+						<tr ng-repeat="row in resultsTable.rows">
+							<td>{{row.header}} </td>
+							<!-- the number:2 filter rounds -->
+							<td ng-repeat ="i in successRow" ng-style={{row.colours[i]}};  >{{100 * row.results[i] | number:0}}%</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
